@@ -1,0 +1,30 @@
+name = "echo-traffic-shaper"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "echo-traffic-shaper"
+database_id = "ffd5266e-f2e7-43af-8cad-a273eb8a35fb"
+
+[[kv_namespaces]]
+binding = "TRAFFIC_CACHE"
+id = "fb7f4c9f10824dc289e5ef183128e01c"
+
+[[services]]
+binding = "SHARED_BRAIN"
+service = "echo-shared-brain"
+
+[[services]]
+binding = "SWARM_BRAIN"
+service = "echo-swarm-brain"
+
+[[services]]
+binding = "ALERT_ROUTER"
+service = "echo-alert-router"
+
+[triggers]
+crons = ["*/5 * * * *"]
+
+[vars]
+VERSION = "1.0.0"
