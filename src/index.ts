@@ -1043,6 +1043,19 @@ async function handleScheduled(event: ScheduledEvent, env: Env): Promise<void> {
 // Worker export
 // ---------------------------------------------------------------------------
 
+
+app.onError((err, c) => {
+  if (err.message?.includes('JSON')) {
+    return c.json({ error: 'Invalid JSON body' }, 400);
+  }
+  console.error(`[echo-traffic-shaper] ${err.message}`);
+  return c.json({ error: 'Internal server error' }, 500);
+});
+
+app.notFound((c) => {
+  return c.json({ error: 'Not found' }, 404);
+});
+
 export default {
   fetch: app.fetch,
   scheduled: handleScheduled,
