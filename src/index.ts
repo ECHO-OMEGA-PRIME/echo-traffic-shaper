@@ -307,6 +307,17 @@ const app = new Hono<{ Bindings: Env }>();
 
 app.use('*', cors({ origin: '*', allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'] }));
 
+// Security headers middleware
+app.use('*', async (c, next) => {
+  await next();
+  c.header('X-Content-Type-Options', 'nosniff');
+  c.header('X-Frame-Options', 'DENY');
+  c.header('X-XSS-Protection', '1; mode=block');
+  c.header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  c.header('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  c.header('Referrer-Policy', 'strict-origin-when-cross-origin');
+});
+
 // Auth on all non-health routes
 app.use('*', async (c, next) => {
   const path = new URL(c.req.url).pathname;
